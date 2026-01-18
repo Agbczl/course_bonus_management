@@ -2,3 +2,21 @@ target/
 .mvn/wrapper/maven-wrapper.jar
 
 .project
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Maven
+target/
+pom.xml.version
+
+# 日志与临时文件
+*.log
+*.tmp
+*.class
+
+# 环境配置
+application.properties
