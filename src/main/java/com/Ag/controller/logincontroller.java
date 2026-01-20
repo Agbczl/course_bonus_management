@@ -1,0 +1,29 @@
+package com.Ag.controller;
+
+import com.Ag.pojo.Result;
+import com.Ag.pojo.User;
+import com.Ag.service.StudentService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+@Slf4j
+@RestController
+public class logincontroller {
+
+    @Autowired
+    private StudentService studentService;
+
+    @PostMapping("/login")
+    public Result login(@RequestBody User user) {
+        log.info("用户登录：{}", user);
+
+        User loginUser = studentService.login(user);
+
+        if (loginUser != null) {
+            return Result.success(loginUser);
+        } else {
+            return Result.error("用户名或密码错误");
+        }
+    }
+}
