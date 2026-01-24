@@ -1,6 +1,6 @@
 package com.Ag.service;
 
-import com.Ag.pojo.AssessmentApplication;
+import com.Ag.pojo.ApplicationForm;
 import com.Ag.pojo.AssessmentApplicationVo;
 import com.Ag.pojo.User;
 
@@ -11,5 +11,11 @@ public interface StudentService {
     User login(User user);
 
     //根据学生id获取学生所有申报项目
-    List<AssessmentApplicationVo> list(String username);
+    List<AssessmentApplicationVo> GetPersonalApply(String username,String category,String title);
+
+    void DeleteStu(long username, long id);
+
+    void InsertApply(long Stu_id, ApplicationForm assessmentApplicationVo);
+
+    void UpdateApply(ApplicationForm applicationForm);
 }

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.Ag.mapper.StuMapper">
+    <select id="SelectPersonalApply" resultType="com.Ag.pojo.AssessmentApplicationVo">
+        select * from apply_record,user
+        <where>
+            <if test = "123 != 1">
+                apply_record.student_id = user.id
+            </if>
+            <if test = "username != null">
+                and #{username} = user.username
+            </if>
+            <if test = "title != null">
+                and #{title} = apply_record.title
+            </if>
+            <if test = "category != null">
+                and #{category} = apply_record.category
+            </if>
+            order by apply_record.update_time desc
+    </where>
+    </select>
+
+    <delete id="DeleteAssessmentApplication">
+        delete from apply_record where apply_record.student_id = #{Stu_id} and apply_record.id = #{id}
+    </delete>
+
+    <insert id="InsertApplication">
+        insert into apply_record
+        (student_id, title, category, description, score, status, create_time, update_time) values (#{stuid},#{a.title},#{a.category},#{a.description},#{a.score},"待审核",now(),now())
+    </insert>
+
+    <update id="UpdateApplication">
+        update apply_record
+        <set>
+            <if test="a.title != null and a.title !='' ">
+                title = #{a.title},
+            </if>
+            <if test="a.category != null and a.category !='' ">
+                category = #{a.category},
+            </if>
+            <if test="a.description != null and a.description !='' ">
+                description = #{a.description},
+            </if>
+            <if test="a.score !=null">
+                score = #{a.score},
+            </if>
+            <if test="a.status != null and a.status !='' ">
+                status = #{a.status},
+            </if>
+            update_time = now()
+        </set>
+        where id = #{a.id}
+    </update>
+
+</mapper>
+
