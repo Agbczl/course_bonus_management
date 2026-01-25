@@ -30,8 +30,8 @@ public class StudentServiceimpl implements StudentService {
     }
 
     @Override
-    public void DeleteStu(long username, long id) {
-        stuMapper.DeleteAssessmentApplication(username,id);
+    public void DeleteStu(long username, List<Long> ids) {
+        stuMapper.DeleteAssessmentApplication(username,ids);
     }
 
 
@@ -43,6 +43,17 @@ public class StudentServiceimpl implements StudentService {
     @Override
     public void UpdateApply( ApplicationForm applicationForm) {
         stuMapper.UpdateApplication(applicationForm);
+    }
+
+
+    @Override
+    public AssessmentApplicationVo GetById(Long id){
+       return stuMapper.selectid(id);
+    }
+
+    @Override
+    public List<AssessmentApplicationVo> GetByCategory(String category) {
+        return stuMapper.selectByCategory(category);
     }
 
 }

@@ -24,7 +24,9 @@
     </select>
 
     <delete id="DeleteAssessmentApplication">
-        delete from apply_record where apply_record.student_id = #{Stu_id} and apply_record.id = #{id}
+        delete from apply_record where apply_record.student_id = #{Stu_id} and apply_record.id
+        in <foreach collection="ids" item="id" separator="," open="(" close=")">#{id}
+        </foreach>
     </delete>
 
     <insert id="InsertApplication">
