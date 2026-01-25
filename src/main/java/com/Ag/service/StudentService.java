@@ -20,4 +20,5 @@ public interface StudentService {
     //根据id查询数据
     AssessmentApplicationVo GetById(Long id);
     List<AssessmentApplicationVo> GetByCategory(String category);
+
 }

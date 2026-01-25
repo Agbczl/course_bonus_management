@@ -11,8 +11,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AssessmentApplicationVo {
-    private Integer id;
-    private String studentName;
+    private Long id;
+    private String username;
+    private Long student_id;
     private String major;
     private String grade;
     private String title;
@@ -20,7 +21,6 @@ public class AssessmentApplicationVo {
     private String category;
     private Integer score;
     private String status;
-    private String auditComment;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
 }

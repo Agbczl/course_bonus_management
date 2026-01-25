@@ -30,4 +30,9 @@ public interface StuMapper {
 
     @Select("select * from apply_record where category = #{category}")
     List<AssessmentApplicationVo> selectByCategory(String category);
+
+    List<AssessmentApplicationVo> selectAll(String username, String status);
+
+
 }
+

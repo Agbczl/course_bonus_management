@@ -57,5 +57,30 @@
         where id = #{a.id}
     </update>
 
+    <select id="selectAll" resultType="com.Ag.pojo.AssessmentApplicationVo">
+        SELECT
+        a.student_id,
+        a.id,
+        s.username AS username,
+        s.major,
+        s.grade,
+        a.title,
+        a.category,
+        a.score,
+        a.status,
+        a.description,
+        a.create_time AS createTime
+        FROM apply_record a
+        JOIN user s ON a.student_id = s.id
+        <where>
+            <if test="username != null and username != ''">
+                AND s.username LIKE CONCAT('%', #{username}, '%')
+            </if>
+            <if test="status != null and status != ''">
+                AND a.status = #{status}
+            </if>
+        </where>
+        ORDER BY a.create_time DESC
+    </select>
 </mapper>
 
