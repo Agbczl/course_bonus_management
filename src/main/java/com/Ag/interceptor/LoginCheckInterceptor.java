@@ -28,8 +28,6 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
         }
 
         String jwt = request.getHeader("token");
-
-
         if(!StringUtils.hasLength(jwt)){
             log.info("请求头token信息为空,返回未登记状态.");
             Result error = Result.error("NOT_LOGIN");
@@ -46,11 +44,13 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
 
             // 4. 取出用户名（JWT 的 subject）
             String username = claims.get("username", String.class);
+            String role = (String) claims.get("role");
             long id = claims.get("id", Long.class);
 
             // 5. 存入 request，供后续使用
             request.setAttribute("username", username);
             request.setAttribute("id", id);
+            request.setAttribute("role", role);
 
             log.info("当前登录用户: {}", username);
         } catch (Exception e) {

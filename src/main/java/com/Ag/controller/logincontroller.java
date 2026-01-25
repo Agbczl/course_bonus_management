@@ -30,6 +30,7 @@ public class logincontroller {
             Map<String, Object> map = new HashMap<>();
             map.put("id", loginUser.getId());
             map.put("username", loginUser.getUsername());
+            map.put("role", loginUser.getRole());
             String jwt = JwtUtils.generateJwt(map);
             return Result.success(jwt);
         } else {
