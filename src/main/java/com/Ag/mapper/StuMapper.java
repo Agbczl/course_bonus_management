@@ -6,6 +6,7 @@ import com.Ag.pojo.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -33,6 +34,7 @@ public interface StuMapper {
 
     List<AssessmentApplicationVo> selectAll(String username, String status);
 
-
+    @Update("update  apply_record set status = #{status} where id = #{id}")
+    int updateById(ApplicationForm updateForm);
 }
 
