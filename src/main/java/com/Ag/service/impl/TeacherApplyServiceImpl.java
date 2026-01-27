@@ -7,7 +7,10 @@ import com.Ag.service.TeacherApplyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TeacherApplyServiceImpl implements TeacherApplyService {
@@ -17,7 +20,24 @@ public class TeacherApplyServiceImpl implements TeacherApplyService {
 
     @Override
     public List<AssessmentApplicationVo> listAll(String username, String status) {
-        return applyMapper.selectAll(username, status);
+        List<AssessmentApplicationVo> rawResults =  applyMapper.selectAll(username, status);
+        List<AssessmentApplicationVo> processedResults = new ArrayList<>();
+        for (AssessmentApplicationVo vo : rawResults) {
+            String imageListStr = vo.getImageListStr();
+            List<String> imageList = new ArrayList<>();
+            if (imageListStr != null && !imageListStr.isEmpty()) {
+                try {
+                    imageList = Arrays.stream(imageListStr.split(","))
+                            .filter(s -> s != null && !s.trim().isEmpty())
+                            .collect(Collectors.toList());
+                } catch (Exception e) {
+                    System.err.println("Error processing image list string: " + imageListStr + ", Error: " + e.getMessage());
+                }
+            }
+            vo.setImageList(imageList);
+            vo.setImageListStr(null);
+        }
+        return rawResults;
     }
 
     @Override
@@ -28,7 +48,7 @@ public class TeacherApplyServiceImpl implements TeacherApplyService {
         //     return false;
         // }
 
-        ApplicationForm updateForm = new ApplicationForm();
+        AssessmentApplicationVo updateForm = new AssessmentApplicationVo();
         updateForm.setId(applicationId);
         updateForm.setStatus(newStatus); // 设置新状态
         int rowsAffected = applyMapper.updateById(updateForm); // 或者使用 updateWrapper 指定条件

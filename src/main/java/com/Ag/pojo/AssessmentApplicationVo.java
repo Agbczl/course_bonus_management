@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -23,4 +24,6 @@ public class AssessmentApplicationVo {
     private String status;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
+    private List<String> imageList;
+    private String imageListStr;
 }

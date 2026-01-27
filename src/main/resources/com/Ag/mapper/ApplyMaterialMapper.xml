@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.Ag.mapper.ApplyMaterialMapper">
+
+    <insert id="insertBatch">
+        INSERT INTO apply_material (apply_id, image_list)
+        VALUES
+        <foreach collection="paths" item="path" separator=",">
+            (#{applyId}, #{path})
+        </foreach>
+    </insert>
+
+    <select id="selectByApplyId" resultType="string">
+        SELECT image_list
+        FROM apply_material
+        WHERE apply_id = #{applyId}
+    </select>
+
+
+    <delete id="deleteByApplyId">
+        delete from apply_material where apply_material.apply_id in <foreach collection="ids" item="id" separator="," open="(" close=")">#{id}
+    </foreach>
+    </delete>
+</mapper>

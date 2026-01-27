@@ -14,9 +14,9 @@ public interface StudentService {
     //根据id删除(包含批量删除)
     void DeleteStu(long username, List<Long> ids);
     //根据学生id对应插入
-    void InsertApply(long Stu_id, ApplicationForm assessmentApplicationVo);
+    void InsertApply(long Stu_id, AssessmentApplicationVo assessmentApplicationVo);
     //更新数据
-    void UpdateApply(ApplicationForm applicationForm);
+    void UpdateApply(AssessmentApplicationVo applicationForm);
     //根据id查询数据
     AssessmentApplicationVo GetById(Long id);
     List<AssessmentApplicationVo> GetByCategory(String category);

@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,6 +19,7 @@ public class ApplicationForm {
     private Long score;
     private LocalDateTime createdTime;
     private LocalDateTime updatedTime;
+    private List<String> imageList;
 }
 
 //插入数据时使用

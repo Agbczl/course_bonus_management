@@ -25,9 +25,9 @@ public interface StuMapper {
 
     void DeleteAssessmentApplication(long Stu_id,List<Long> ids );
 
-    void InsertApplication(@Param("stuid") long Stu_id, @Param("a") ApplicationForm assessmentApplicationVo);
+    void InsertApplication(@Param("stuid") long Stu_id, @Param("a") AssessmentApplicationVo assessmentApplicationVo);
 
-    void UpdateApplication(@Param("a") ApplicationForm applicationForm);
+    void UpdateApplication(@Param("a") AssessmentApplicationVo applicationForm);
 
     @Select("select * from apply_record where category = #{category}")
     List<AssessmentApplicationVo> selectByCategory(String category);
@@ -35,6 +35,6 @@ public interface StuMapper {
     List<AssessmentApplicationVo> selectAll(String username, String status);
 
     @Update("update  apply_record set status = #{status} where id = #{id}")
-    int updateById(ApplicationForm updateForm);
+    int updateById(AssessmentApplicationVo updateForm);
 }
 

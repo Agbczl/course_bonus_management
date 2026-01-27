@@ -15,7 +15,6 @@ import java.util.List;
 @Slf4j
 @RestController()
 public class StudentController {
-
     @Autowired
     private StudentService studentService;
     @GetMapping("/stus")
@@ -25,7 +24,6 @@ public class StudentController {
         List<AssessmentApplicationVo> personalproject =  studentService.GetPersonalApply(username,category,title);
         return Result.success(personalproject);
     }
-
     @DeleteMapping("/delete/{ids}")
     public Result  DeleteStudent(HttpServletRequest request,@PathVariable List<Long> ids){
         log.info("删除申报id等于{}的申报",ids);
@@ -36,7 +34,7 @@ public class StudentController {
 
 
     @PutMapping("/insert")
-    public Result InsertStudent(HttpServletRequest request, @RequestBody(required = true)ApplicationForm applicationForm){
+    public Result InsertStudent(HttpServletRequest request, @RequestBody(required = true)AssessmentApplicationVo applicationForm){
         log.info("增加申报");
         long Stu_id = (long) request.getAttribute("id");
         studentService.InsertApply(Stu_id,applicationForm);
@@ -44,7 +42,7 @@ public class StudentController {
     }
 
     @PutMapping("/update")
-    public Result UpdateStudent(HttpServletRequest request, @RequestBody(required = true)ApplicationForm applicationForm){
+    public Result UpdateStudent(HttpServletRequest request, @RequestBody(required = true)AssessmentApplicationVo applicationForm){
         log.info("更新申报");
         studentService.UpdateApply(applicationForm);
         return Result.success();
@@ -54,6 +52,7 @@ public class StudentController {
     public Result  GetById(HttpServletRequest request,@PathVariable Long id){
         log.info("根据id查询申报");
         AssessmentApplicationVo assessmentApplicationVo = studentService.GetById(id);
+        log.info("imageList = {}", assessmentApplicationVo.getImageList());
         return Result.success(assessmentApplicationVo);
     }
 

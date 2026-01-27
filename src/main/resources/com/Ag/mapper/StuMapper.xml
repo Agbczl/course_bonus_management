@@ -4,23 +4,47 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.Ag.mapper.StuMapper">
+    <!-- 注意：这里假设你的方法名是 SelectPersonalApply，参数对象是 AssessmentApplicationVo -->
     <select id="SelectPersonalApply" resultType="com.Ag.pojo.AssessmentApplicationVo">
-        select * from apply_record,user
+        SELECT
+        ar.id,
+        u.username,
+        u.id AS student_id, -- 假设 student_id 来自 user 表的 id
+        u.major, -- 假设 major 来自 user 表
+        u.grade, -- 假设 grade 来自 user 表
+        ar.title,
+        ar.description,
+        ar.category,
+        ar.score,
+        ar.status,
+        ar.create_time AS createTime,
+        ar.update_time AS updateTime,
+        GROUP_CONCAT(
+        am.image_list SEPARATOR ',' -- 使用逗号作为分隔符
+        )  AS imageListStr -- 将图片路径聚合为一个字符串
+        FROM
+        apply_record ar
+        INNER JOIN
+        user u ON ar.student_id = u.id -- 关联用户表
+        LEFT JOIN
+        apply_material am ON ar.id = am.apply_id -- 左关联材料表，保证没有材料的申请也能查出
         <where>
-            <if test = "123 != 1">
-                apply_record.student_id = user.id
+            <!-- 注意：这里的参数名应与 AssessmentApplicationVo 中的属性名一致 -->
+            <if test="username != null and username != ''">
+                AND u.username = #{username}
             </if>
-            <if test = "username != null">
-                and #{username} = user.username
+            <if test="title != null and title != ''">
+                AND ar.title = #{title}
             </if>
-            <if test = "title != null">
-                and #{title} = apply_record.title
+            <if test="category != null and category != ''">
+                AND ar.category = #{category}
             </if>
-            <if test = "category != null">
-                and #{category} = apply_record.category
-            </if>
-            order by apply_record.update_time desc
-    </where>
+            <!-- 可以根据需要添加其他条件 -->
+        </where>
+        GROUP BY
+        ar.id, u.id -- 按申请ID和用户ID分组，聚合图片路径
+        ORDER BY
+        ar.update_time DESC
     </select>
 
     <delete id="DeleteAssessmentApplication">
@@ -29,7 +53,7 @@
         </foreach>
     </delete>
 
-    <insert id="InsertApplication">
+    <insert id="InsertApplication" useGeneratedKeys="true" keyProperty="a.id">
         insert into apply_record
         (student_id, title, category, description, score, status, create_time, update_time) values (#{stuid},#{a.title},#{a.category},#{a.description},#{a.score},"待审核",now(),now())
     </insert>
@@ -59,28 +83,54 @@
 
     <select id="selectAll" resultType="com.Ag.pojo.AssessmentApplicationVo">
         SELECT
-        a.student_id,
-        a.id,
-        s.username AS username,
-        s.major,
-        s.grade,
-        a.title,
-        a.category,
-        a.score,
-        a.status,
-        a.description,
-        a.create_time AS createTime
-        FROM apply_record a
-        JOIN user s ON a.student_id = s.id
+        ar.id,
+        u.username,
+        u.id AS student_id, -- 假设 student_id 来自 user 表的 id
+        u.major, -- 假设 major 来自 user 表
+        u.grade, -- 假设 grade 来自 user 表
+        ar.title,
+        ar.description,
+        ar.category,
+        ar.score,
+        ar.status,
+        ar.create_time AS createTime,
+        ar.update_time AS updateTime,
+        GROUP_CONCAT(
+        am.image_list SEPARATOR ',' -- 使用逗号作为分隔符
+        )  AS imageListStr -- 将图片路径聚合为一个字符串
+        FROM
+        apply_record ar
+        INNER JOIN
+        user u ON ar.student_id = u.id -- 关联用户表
+        LEFT JOIN
+        apply_material am ON ar.id = am.apply_id -- 左关联材料表，保证没有材料的申请也能查出
         <where>
             <if test="username != null and username != ''">
-                AND s.username LIKE CONCAT('%', #{username}, '%')
+                AND u.username LIKE CONCAT('%', #{username}, '%')
             </if>
             <if test="status != null and status != ''">
-                AND a.status = #{status}
+                AND ar.status = #{status}
             </if>
         </where>
-        ORDER BY a.create_time DESC
+        GROUP BY
+        ar.id, u.id -- 按申请ID和用户ID分组，聚合图片路径
+        ORDER BY
+        ar.update_time DESC
     </select>
+
+    <insert id="insertBatch">
+        INSERT INTO apply_material (apply_id, image_path)
+        VALUES
+        <foreach collection="paths" item="path" separator=",">
+            (#{applyId}, #{path})
+        </foreach>
+    </insert>
+
+    <select id="selectByApplyId" resultType="string">
+        SELECT image_path
+        FROM apply_material
+        WHERE apply_id = #{applyId}
+    </select>
+
 </mapper>
 

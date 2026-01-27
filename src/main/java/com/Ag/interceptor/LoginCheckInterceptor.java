@@ -14,21 +14,30 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+
 @Slf4j
 @Component
 public class LoginCheckInterceptor implements HandlerInterceptor {
-    @Override//运行前运行
+
+    @Override // 运行前运行
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String url = request.getRequestURL().toString();
-        log.info("请求的url:{}",url);
+        log.info("请求的url:{}", url);
 
-        if(url.contains("login")){
+        // --- 新增：放行对 /upload/ 路径的请求 (通常用于公开访问的上传文件) ---
+        if (url.contains("/upload/")) {
+            log.info("请求的是上传文件, 放行: {}", url);
+            return true; // 直接放行，不再检查token
+        }
+        // -------------------------------------------------------------
+
+        if (url.contains("login")) {
             log.info("执行登录操作,放行");
             return true;
         }
 
         String jwt = request.getHeader("token");
-        if(!StringUtils.hasLength(jwt)){
+        if (!StringUtils.hasLength(jwt)) {
             log.info("请求头token信息为空,返回未登记状态.");
             Result error = Result.error("NOT_LOGIN");
 
@@ -38,7 +47,6 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
         }
 
         try {
-
             // 3. 解析 JWT（关键）
             Claims claims = JwtUtils.parseJWT(jwt);
 
@@ -65,6 +73,16 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
 
         log.info("令牌合法,放行");
         return true;
-
     }
+
+    // 可选：实现 postHandle 或 afterCompletion 方法
+    // @Override
+    // public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+    //     // 在 Controller 方法执行后，视图渲染前执行
+    // }
+
+    // @Override
+    // public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+    //     // 在整个请求完成后执行
+    // }
 }
