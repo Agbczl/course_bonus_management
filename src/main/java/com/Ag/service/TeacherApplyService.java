@@ -5,8 +5,8 @@ import com.Ag.pojo.AssessmentApplicationVo;
 import java.util.List;
 
 public interface TeacherApplyService {
-    List<AssessmentApplicationVo> listAll(String username, String status);
+    List<AssessmentApplicationVo> listAll(Long teacherId,String username, String status);
 
-    boolean updateApplicationStatus(Long applicationId, String newStatus);
+    boolean updateApplicationStatusAndComment(Long applicationId, String newStatus,String teacherComment);
 }
 

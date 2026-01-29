@@ -14,4 +14,5 @@ public class User {
     private String role; // 1为老师,2为学生;
     private String major;
     private String grade;
+    private String title;
 }

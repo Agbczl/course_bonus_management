@@ -91,6 +91,10 @@ public class StudentServiceimpl implements StudentService {
     }
 
 
+    @Override
+    public User selectUser(Long id){
+        return stuMapper.selectUser(id);
+    }
 
 
 }

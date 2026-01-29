@@ -17,6 +17,7 @@ public class ApplicationForm {
     private String status;
     private String description;
     private Long score;
+    private String teacherComment;
     private LocalDateTime createdTime;
     private LocalDateTime updatedTime;
     private List<String> imageList;

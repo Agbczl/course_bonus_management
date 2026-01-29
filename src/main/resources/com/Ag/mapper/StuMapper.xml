@@ -17,6 +17,7 @@
         ar.category,
         ar.score,
         ar.status,
+        ar.teacher_comment,
         ar.create_time AS createTime,
         ar.update_time AS updateTime,
         GROUP_CONCAT(
@@ -85,26 +86,24 @@
         SELECT
         ar.id,
         u.username,
-        u.id AS student_id, -- 假设 student_id 来自 user 表的 id
-        u.major, -- 假设 major 来自 user 表
-        u.grade, -- 假设 grade 来自 user 表
+        u.id AS student_id,
+        u.major,
+        u.grade,
         ar.title,
         ar.description,
         ar.category,
         ar.score,
         ar.status,
+        ar.teacher_comment,
         ar.create_time AS createTime,
         ar.update_time AS updateTime,
-        GROUP_CONCAT(
-        am.image_list SEPARATOR ',' -- 使用逗号作为分隔符
-        )  AS imageListStr -- 将图片路径聚合为一个字符串
-        FROM
-        apply_record ar
-        INNER JOIN
-        user u ON ar.student_id = u.id -- 关联用户表
-        LEFT JOIN
-        apply_material am ON ar.id = am.apply_id -- 左关联材料表，保证没有材料的申请也能查出
+        GROUP_CONCAT(am.image_list SEPARATOR ',') AS imageListStr
+        FROM apply_record ar
+        INNER JOIN user u ON ar.student_id = u.id
+        INNER JOIN teacher_student ts ON ts.student_id = u.id
+        LEFT JOIN apply_material am ON ar.id = am.apply_id
         <where>
+            ts.teacher_id = #{teacherId}
             <if test="username != null and username != ''">
                 AND u.username LIKE CONCAT('%', #{username}, '%')
             </if>
@@ -112,11 +111,10 @@
                 AND ar.status = #{status}
             </if>
         </where>
-        GROUP BY
-        ar.id, u.id -- 按申请ID和用户ID分组，聚合图片路径
-        ORDER BY
-        ar.update_time DESC
+        GROUP BY ar.id, u.id
+        ORDER BY ar.update_time DESC
     </select>
+
 
     <insert id="insertBatch">
         INSERT INTO apply_material (apply_id, image_path)

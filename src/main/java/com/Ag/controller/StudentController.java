@@ -1,8 +1,10 @@
 package com.Ag.controller;
 
+import com.Ag.mapper.StuMapper;
 import com.Ag.pojo.ApplicationForm;
 import com.Ag.pojo.AssessmentApplicationVo;
 import com.Ag.pojo.Result;
+import com.Ag.pojo.User;
 import com.Ag.service.StudentService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +33,6 @@ public class StudentController {
         studentService.DeleteStu(Stu_id,ids);
         return Result.success();
     }
-
 
     @PutMapping("/insert")
     public Result InsertStudent(HttpServletRequest request, @RequestBody(required = true)AssessmentApplicationVo applicationForm){
@@ -62,6 +63,20 @@ public class StudentController {
         List<AssessmentApplicationVo> category_Apply = studentService.GetByCategory(category);
         return Result.success(category_Apply);
 
+    }
+
+    @GetMapping("/me")
+    public Result  Me(HttpServletRequest request){
+        Long id = (Long) request.getAttribute("id");
+        if (id == null) {
+            return Result.error("未登录");
+        }
+        User  user =  studentService.selectUser(id);
+        if (user == null) {
+            return Result.error("用户不存在");
+        }
+
+        return Result.success(user);
     }
 
 

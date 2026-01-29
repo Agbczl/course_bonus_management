@@ -21,4 +21,5 @@ public interface StudentService {
     AssessmentApplicationVo GetById(Long id);
     List<AssessmentApplicationVo> GetByCategory(String category);
 
+    User selectUser(Long id);
 }

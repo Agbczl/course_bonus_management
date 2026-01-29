@@ -19,8 +19,8 @@ public class TeacherApplyServiceImpl implements TeacherApplyService {
     private StuMapper applyMapper;
 
     @Override
-    public List<AssessmentApplicationVo> listAll(String username, String status) {
-        List<AssessmentApplicationVo> rawResults =  applyMapper.selectAll(username, status);
+    public List<AssessmentApplicationVo> listAll(Long teacherId,String username, String status) {
+        List<AssessmentApplicationVo> rawResults =  applyMapper.selectAll(teacherId,username, status);
         List<AssessmentApplicationVo> processedResults = new ArrayList<>();
         for (AssessmentApplicationVo vo : rawResults) {
             String imageListStr = vo.getImageListStr();
@@ -41,7 +41,7 @@ public class TeacherApplyServiceImpl implements TeacherApplyService {
     }
 
     @Override
-    public boolean updateApplicationStatus(Long applicationId, String newStatus){
+    public boolean updateApplicationStatusAndComment(Long applicationId, String newStatus,String teacherComment){
         // 1. 可以先查询一下当前状态，做一些业务校验（例如，不能重复审核等）
         // ApplicationForm currentApp = applicationFormMapper.selectById(applicationId);
         // if (currentApp == null || !canReview(currentApp.getStatus())) { // 假设有个 canReview 规则方法
@@ -50,7 +50,8 @@ public class TeacherApplyServiceImpl implements TeacherApplyService {
 
         AssessmentApplicationVo updateForm = new AssessmentApplicationVo();
         updateForm.setId(applicationId);
-        updateForm.setStatus(newStatus); // 设置新状态
+        updateForm.setStatus(newStatus);
+        updateForm.setTeacherComment(teacherComment);// 设置新状态
         int rowsAffected = applyMapper.updateById(updateForm); // 或者使用 updateWrapper 指定条件
 
         // 3. 判断更新是否成功 (影响行数 > 0)

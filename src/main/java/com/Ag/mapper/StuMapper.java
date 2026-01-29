@@ -32,9 +32,12 @@ public interface StuMapper {
     @Select("select * from apply_record where category = #{category}")
     List<AssessmentApplicationVo> selectByCategory(String category);
 
-    List<AssessmentApplicationVo> selectAll(String username, String status);
+    List<AssessmentApplicationVo> selectAll(Long teacherId,String username, String status);
 
-    @Update("update  apply_record set status = #{status} where id = #{id}")
+    @Update("update  apply_record set status = #{status},teacher_comment = #{teacherComment} where id = #{id}")
     int updateById(AssessmentApplicationVo updateForm);
+
+    @Select("select * from user where id = #{id}")
+    User selectUser(Long id);
 }
 
