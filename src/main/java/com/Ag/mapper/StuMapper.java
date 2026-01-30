@@ -3,6 +3,7 @@ package com.Ag.mapper;
 import com.Ag.pojo.ApplicationForm;
 import com.Ag.pojo.AssessmentApplicationVo;
 import com.Ag.pojo.User;
+import com.Ag.pojo.student_score;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -21,7 +22,7 @@ public interface StuMapper {
             @Param("username") String username,
             @Param("password") String password
     );
-    List<AssessmentApplicationVo> SelectPersonalApply(String username,String category,String title);
+    List<AssessmentApplicationVo> SelectPersonalApply(String username,String module,String category,String title);
 
     void DeleteAssessmentApplication(long Stu_id,List<Long> ids );
 
@@ -39,5 +40,10 @@ public interface StuMapper {
 
     @Select("select * from user where id = #{id}")
     User selectUser(Long id);
+
+    void recalculatescore(Long studentId);
+
+    @Select("select module,score from scoring_module where student_id = #{id} order by module")
+    List<student_score> SelectScore(Long id);
 }
 

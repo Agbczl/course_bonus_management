@@ -57,4 +57,10 @@ public class TeacherApplyServiceImpl implements TeacherApplyService {
         // 3. 判断更新是否成功 (影响行数 > 0)
         return rowsAffected > 0;
     }
+
+
+    @Override
+    public void recalculateAndSyncScoringModule(Long studentId){
+        applyMapper.recalculatescore(studentId);
+    }
 }

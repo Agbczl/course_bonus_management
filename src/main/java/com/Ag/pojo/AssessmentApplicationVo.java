@@ -15,8 +15,9 @@ import java.util.List;
 public class AssessmentApplicationVo {
     private Long id;
     private String username;
-    private Long student_id;
+    private Long studentId;
     private String major;
+    private String module;
     private String grade;
     private String title;
     private String description;

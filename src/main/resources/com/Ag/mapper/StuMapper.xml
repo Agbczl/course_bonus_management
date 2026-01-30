@@ -8,6 +8,7 @@
     <select id="SelectPersonalApply" resultType="com.Ag.pojo.AssessmentApplicationVo">
         SELECT
         ar.id,
+        ar.module,
         u.username,
         u.id AS student_id, -- 假设 student_id 来自 user 表的 id
         u.major, -- 假设 major 来自 user 表
@@ -37,10 +38,12 @@
             <if test="title != null and title != ''">
                 AND ar.title = #{title}
             </if>
+            <if test="module != null and module != ''">
+                AND ar.module = #{module}
+            </if>
             <if test="category != null and category != ''">
                 AND ar.category = #{category}
             </if>
-            <!-- 可以根据需要添加其他条件 -->
         </where>
         GROUP BY
         ar.id, u.id -- 按申请ID和用户ID分组，聚合图片路径
@@ -56,7 +59,7 @@
 
     <insert id="InsertApplication" useGeneratedKeys="true" keyProperty="a.id">
         insert into apply_record
-        (student_id, title, category, description, score, status, create_time, update_time) values (#{stuid},#{a.title},#{a.category},#{a.description},#{a.score},"待审核",now(),now())
+        (student_id,module, title, category, description, score, status, create_time, update_time) values (#{stuid},#{a.module},#{a.title},#{a.category},#{a.description},#{a.score},"待审核",now(),now())
     </insert>
 
     <update id="UpdateApplication">
@@ -129,6 +132,23 @@
         FROM apply_material
         WHERE apply_id = #{applyId}
     </select>
+
+    <update id="recalculatescore">
+        UPDATE scoring_module sm
+            JOIN (
+            SELECT
+            student_id,
+            module,
+            SUM(score) AS total_score
+            FROM apply_record
+            WHERE student_id = #{studentId} AND status = '已通过'
+            GROUP BY student_id, module
+            ) ar ON sm.student_id = ar.student_id AND sm.module = ar.module
+            SET
+                sm.score = ar.total_score,
+                sm.update_time = NOW()
+        WHERE sm.student_id = #{studentId};
+     </update>
 
 </mapper>
 

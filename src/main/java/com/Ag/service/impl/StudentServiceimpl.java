@@ -5,6 +5,7 @@ import com.Ag.mapper.StuMapper;
 import com.Ag.pojo.ApplicationForm;
 import com.Ag.pojo.AssessmentApplicationVo;
 import com.Ag.pojo.User;
+import com.Ag.pojo.student_score;
 import com.Ag.service.StudentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +36,8 @@ public class StudentServiceimpl implements StudentService {
     }
 
     @Override
-    public List<AssessmentApplicationVo> GetPersonalApply(String username,String category,String title) {
-        List<AssessmentApplicationVo> rawResults =  stuMapper.SelectPersonalApply(username, category, title);
+    public List<AssessmentApplicationVo> GetPersonalApply(String username,String module,String category,String title) {
+        List<AssessmentApplicationVo> rawResults =  stuMapper.SelectPersonalApply(username, module,category, title);
         List<AssessmentApplicationVo> processedResults = new ArrayList<>();
         for (AssessmentApplicationVo vo : rawResults) {
             String imageListStr = vo.getImageListStr();
@@ -94,6 +95,11 @@ public class StudentServiceimpl implements StudentService {
     @Override
     public User selectUser(Long id){
         return stuMapper.selectUser(id);
+    }
+
+    @Override
+    public List<student_score> GetScore(Long id){
+        return stuMapper.SelectScore(id);
     }
 
 

@@ -8,5 +8,7 @@ public interface TeacherApplyService {
     List<AssessmentApplicationVo> listAll(Long teacherId,String username, String status);
 
     boolean updateApplicationStatusAndComment(Long applicationId, String newStatus,String teacherComment);
+
+    void recalculateAndSyncScoringModule(Long studentId);
 }
 

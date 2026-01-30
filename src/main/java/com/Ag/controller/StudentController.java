@@ -1,10 +1,7 @@
 package com.Ag.controller;
 
 import com.Ag.mapper.StuMapper;
-import com.Ag.pojo.ApplicationForm;
-import com.Ag.pojo.AssessmentApplicationVo;
-import com.Ag.pojo.Result;
-import com.Ag.pojo.User;
+import com.Ag.pojo.*;
 import com.Ag.service.StudentService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -20,10 +17,10 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
     @GetMapping("/stus")
-    public Result  GetPersonalAllApply(HttpServletRequest request,@RequestParam(required = false) String category,@RequestParam(required = false)String  title){
+    public Result  GetPersonalAllApply(HttpServletRequest request,@RequestParam(required = false) String module,@RequestParam(required = false) String category,@RequestParam(required = false)String  title){
         log.info("查询个人全部申报数据");
         String username = (String) request.getAttribute("username");
-        List<AssessmentApplicationVo> personalproject =  studentService.GetPersonalApply(username,category,title);
+        List<AssessmentApplicationVo> personalproject =  studentService.GetPersonalApply(username,module,category,title);
         return Result.success(personalproject);
     }
     @DeleteMapping("/delete/{ids}")
@@ -77,6 +74,17 @@ public class StudentController {
         }
 
         return Result.success(user);
+    }
+
+
+    @GetMapping("/score")
+    public Result  GetScore(HttpServletRequest request){
+        Long id = (Long) request.getAttribute("id");
+        if (id == null) {
+            return Result.error("未登录");
+        }
+        List<student_score> scores = studentService.GetScore(id);
+        return Result.success(scores);
     }
 
 

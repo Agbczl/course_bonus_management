@@ -3,6 +3,7 @@ package com.Ag.service;
 import com.Ag.pojo.ApplicationForm;
 import com.Ag.pojo.AssessmentApplicationVo;
 import com.Ag.pojo.User;
+import com.Ag.pojo.student_score;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ public interface StudentService {
     // 学生老师通用登录
     User login(User user);
     //根据学生id获取学生所有申报项目
-    List<AssessmentApplicationVo> GetPersonalApply(String username,String category,String title);
+    List<AssessmentApplicationVo> GetPersonalApply(String username,String module,String category,String title);
     //根据id删除(包含批量删除)
     void DeleteStu(long username, List<Long> ids);
     //根据学生id对应插入
@@ -22,4 +23,6 @@ public interface StudentService {
     List<AssessmentApplicationVo> GetByCategory(String category);
 
     User selectUser(Long id);
+
+    List<student_score> GetScore(Long id);
 }
